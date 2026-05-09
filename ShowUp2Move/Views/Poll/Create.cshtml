@@ -1,0 +1,39 @@
+﻿@{ Layout = "_Layout"; }
+
+<h3>Create Poll</h3>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">New Poll for Group #@ViewBag.GroupID</div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="groupID" value="@ViewBag.GroupID" />
+                    <div class="mb-3">
+                        <label class="form-label">Question</label>
+                        <input type="text" name="question" class="form-control" required
+                               placeholder="e.g. Where should we play?" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Option 1</label>
+                        <input type="text" name="option1" class="form-control" required />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Option 2</label>
+                        <input type="text" name="option2" class="form-control" required />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Option 3 (optional)</label>
+                        <input type="text" name="option3" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Option 4 (optional)</label>
+                        <input type="text" name="option4" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 fw-bold">Create Poll</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

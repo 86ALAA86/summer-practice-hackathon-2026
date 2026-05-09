@@ -1,7 +1,5 @@
-﻿@model List<clsGroup_BLL>
-@{
-    Layout = "_Layout";
-}
+﻿@model List<clsGroup>
+@{ Layout = "_Layout"; }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>My Groups</h3>
@@ -12,11 +10,11 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">You are not in any groups yet. Use <strong>Find a Group</strong> to get matched!</div>
+    <div class="alert alert-info">You are not in any groups yet.</div>
 }
 else
 {
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover align-middle">
         <thead class="table-success">
             <tr>
                 <th>Sport</th>
@@ -28,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (clsGroup_BLL group in Model)
+            @foreach (clsGroup group in Model)
             {
                 <tr>
                     <td>@group.SportName</td>
@@ -48,8 +46,13 @@ else
                             </form>
                         }
                     </td>
-                    <td>
-                        <a href="/Group/Detail/@group.GroupID" class="btn btn-sm btn-outline-secondary">View</a>
+                    <td class="d-flex gap-1">
+                        <a href="/Group/Detail/@group.GroupID" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                        <a href="/Message/Chat/@group.GroupID" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-chat-dots-fill"></i> Chat
+                        </a>
                     </td>
                 </tr>
             }

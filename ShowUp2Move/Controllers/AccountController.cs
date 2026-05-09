@@ -5,20 +5,17 @@ namespace ShowUp2Move.Controllers
 {
     public class AccountController : Controller
     {
-        // GET Login 
         public IActionResult Login()
         {
             if (HttpContext.Session.GetInt32("UserID") != null)
                 return RedirectToAction("Dashboard", "Home");
-
             return View();
         }
 
-        // POST Login 
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
-            clsUser_BLL? user = clsUser_BLL.FindByCredentials(username, password);
+            clsUser? user = clsUser.FindByCredentials(username, password);
 
             if (user == null)
             {
@@ -33,18 +30,16 @@ namespace ShowUp2Move.Controllers
             return RedirectToAction("Dashboard", "Home");
         }
 
-        //  GET Register 
         public IActionResult Register()
         {
             return View();
         }
 
-        //  POST Register 
         [HttpPost]
         public IActionResult Register(string username, string password, string fullName)
         {
             int newUserID = -1;
-            bool success = clsUser_BLL.Add(username, password, fullName, ref newUserID);
+            bool success = clsUser.Add(username, password, fullName, ref newUserID);
 
             if (!success)
             {
@@ -59,8 +54,6 @@ namespace ShowUp2Move.Controllers
             return RedirectToAction("Dashboard", "Home");
         }
 
-
-        //  Logout 
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

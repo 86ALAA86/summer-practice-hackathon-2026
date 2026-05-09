@@ -16,7 +16,7 @@
                         <select name="sportID" class="form-select">
                             @if (ViewBag.Sports != null)
                             {
-                                foreach (clsSport_BLL sport in ViewBag.Sports)
+                                foreach (clsSport sport in ViewBag.Sports)
                                 {
                                     <option value="@sport.SportID">@sport.SportName</option>
                                 }

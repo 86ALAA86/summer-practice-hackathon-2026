@@ -1,4 +1,4 @@
-﻿@model List<clsSport_BLL>
+﻿@model List<clsSport>
 @{
     Layout = "_Layout";
 }
@@ -16,7 +16,7 @@
                     <div class="mb-3">
                         <label class="form-label">Sport</label>
                         <select name="sportID" class="form-select">
-                            @foreach (clsSport_BLL sport in Model)
+                            @foreach (clsSport sport in Model)
                             {
                                 <option value="@sport.SportID">
                                     @sport.SportName (@sport.MinGroupSize–@sport.MaxGroupSize players)

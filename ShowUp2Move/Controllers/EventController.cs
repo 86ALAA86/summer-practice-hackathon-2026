@@ -5,43 +5,34 @@ namespace ShowUp2Move.Controllers
 {
     public class EventController : Controller
     {
-        // All Events
         public IActionResult Index()
         {
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            List<clsEvent_BLL> events = clsEvent_BLL.GetAll();
-            return View(events);
+            return View(clsEvent.GetAll());
         }
 
-        // Event Detail
         public IActionResult Detail(int id)
         {
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            clsEvent_BLL? ev = clsEvent_BLL.Find(id);
-
-            if (ev == null)
-                return RedirectToAction("Index");
+            clsEvent? ev = clsEvent.Find(id);
+            if (ev == null) return RedirectToAction("Index");
 
             return View(ev);
         }
 
-        //  GET Create 
-
-        [HttpGet]
         public IActionResult Create()
         {
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            ViewBag.Sports = clsSport_BLL.GetAll();
+            ViewBag.Sports = clsSport.GetAll();
             return View();
         }
 
-        //POST Create 
         [HttpPost]
         public IActionResult Create(int sportID, string location, DateTime eventDate, string description)
         {
@@ -51,13 +42,13 @@ namespace ShowUp2Move.Controllers
             int userID = HttpContext.Session.GetInt32("UserID")!.Value;
             int newEventID = -1;
 
-            bool success = clsEvent_BLL.Add(userID, sportID, location, eventDate, description, true, ref newEventID);
+            bool success = clsEvent.Add(userID, sportID, location, eventDate, description, true, ref newEventID);
 
             if (success)
                 return RedirectToAction("Detail", new { id = newEventID });
 
             TempData["Error"] = "Failed to create event.";
-            ViewBag.Sports = clsSport_BLL.GetAll();
+            ViewBag.Sports = clsSport.GetAll();
             return View();
         }
     }

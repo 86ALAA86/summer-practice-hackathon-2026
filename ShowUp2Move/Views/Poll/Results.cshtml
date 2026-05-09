@@ -1,0 +1,43 @@
+﻿@{ Layout = "_Layout"; }
+
+<h3>Poll Results</h3>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">Vote & Results</div>
+            <div class="card-body">
+                @if (ViewBag.Results != null)
+                {
+                    <form method="post" action="/Poll/Vote">
+                        <input type="hidden" name="pollID" value="@ViewBag.PollID" />
+                        <input type="hidden" name="groupID" value="0" />
+
+                        @foreach (System.Data.DataRow row in ((System.Data.DataTable)ViewBag.Results).Rows)
+                        {
+                            int votes    = Convert.ToInt32(row["VoteCount"]);
+                            string label = row["OptionText"].ToString()!;
+                            int optID    = Convert.ToInt32(row["OptionID"]);
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label class="form-check-label">
+                                        <input type="radio" name="optionID" value="@optID" class="form-check-input me-1" />
+                                        @label
+                                    </label>
+                                    <span class="badge bg-info">@votes votes</span>
+                                </div>
+                                <div class="progress" style="height:8px;">
+                                    <div class="progress-bar bg-info" style="width:@(votes * 10)%"></div>
+                                </div>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-info w-100 text-white">Submit Vote</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

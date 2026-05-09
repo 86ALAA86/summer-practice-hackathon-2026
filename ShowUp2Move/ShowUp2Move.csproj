@@ -10,4 +10,8 @@
     <ProjectReference Include="..\ShowUp2Move_BLL\ShowUp2Move_BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>

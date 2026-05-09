@@ -1,19 +1,22 @@
-﻿@model clsUser_BLL
-@{
-    Layout = "_Layout";
-}
+﻿@model clsUser
+@{ Layout = "_Layout"; }
 
-<div class="row">
+<div class="row align-items-center mb-4">
     <div class="col-md-8">
-        <h2>Welcome back, <strong>@Model.FullName</strong> 👋</h2>
-        <p class="text-muted">Ready to move today?</p>
+        @if (!string.IsNullOrEmpty(Model.ProfilePhotoUrl))
+        {
+            <img src="@Model.ProfilePhotoUrl" class="rounded-circle me-3"
+                 width="60" height="60" style="object-fit:cover;" />
+        }
+        <span class="fs-3 fw-bold">Welcome, @Model.FullName 👋</span>
+        <p class="text-muted mt-1 mb-0">@(string.IsNullOrEmpty(Model.Description) ? "Ready to move today?" : Model.Description)</p>
     </div>
     <div class="col-md-4 text-end">
         <form method="post" action="/Home/ToggleAvailability">
             @if (Model.IsAvailableToday)
             {
                 <input type="hidden" name="isAvailable" value="false" />
-                <button type="submit" class="btn btn-success btn-lg">
+                <button type="submit" class="btn btn-success btn-lg fw-bold">
                     ✅ ShowUpToday? — I'm IN
                 </button>
             }
@@ -30,47 +33,59 @@
 
 <hr />
 
-<div class="row mt-3 g-3">
-    <div class="col-md-3">
+<div class="row g-3 mt-2">
+    <div class="col-6 col-md-3">
         <a href="/Profile/Index" class="text-decoration-none">
             <div class="card text-center shadow-sm h-100 border-success">
                 <div class="card-body">
                     <i class="bi bi-person-circle fs-1 text-success"></i>
-                    <h5 class="mt-2">My Profile</h5>
-                    <p class="text-muted small">Edit info & sports</p>
+                    <h6 class="mt-2">My Profile</h6>
                 </div>
             </div>
         </a>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <a href="/Group/RunMatching" class="text-decoration-none">
             <div class="card text-center shadow-sm h-100 border-success">
                 <div class="card-body">
                     <i class="bi bi-people-fill fs-1 text-success"></i>
-                    <h5 class="mt-2">Find a Group</h5>
-                    <p class="text-muted small">Auto-match by sport</p>
+                    <h6 class="mt-2">Find a Group</h6>
                 </div>
             </div>
         </a>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <a href="/Group/Index" class="text-decoration-none">
             <div class="card text-center shadow-sm h-100 border-success">
                 <div class="card-body">
                     <i class="bi bi-shield-fill fs-1 text-success"></i>
-                    <h5 class="mt-2">My Groups</h5>
-                    <p class="text-muted small">View & confirm</p>
+                    <h6 class="mt-2">My Groups</h6>
                 </div>
             </div>
         </a>
     </div>
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <a href="/Event/Index" class="text-decoration-none">
             <div class="card text-center shadow-sm h-100 border-success">
                 <div class="card-body">
                     <i class="bi bi-calendar-event-fill fs-1 text-success"></i>
-                    <h5 class="mt-2">Events</h5>
-                    <p class="text-muted small">Browse & create</p>
+                    <h6 class="mt-2">Events</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3">
+        <a href="/Notification/Index" class="text-decoration-none">
+            <div class="card text-center shadow-sm h-100 border-warning">
+                <div class="card-body">
+                    <i class="bi bi-bell-fill fs-1 text-warning"></i>
+                    <h6 class="mt-2">
+                        Notifications
+                        @if (ViewBag.UnreadCount > 0)
+                        {
+                            <span class="badge bg-danger">@ViewBag.UnreadCount</span>
+                        }
+                    </h6>
                 </div>
             </div>
         </a>

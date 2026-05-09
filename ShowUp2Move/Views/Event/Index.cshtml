@@ -1,4 +1,4 @@
-﻿@model List<clsEvent_BLL>
+﻿@model List<clsEvent>
 @{
     Layout = "_Layout";
 }
@@ -27,7 +27,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (clsEvent_BLL ev in Model)
+            @foreach (clsEvent ev in Model)
             {
                 <tr>
                     <td>@ev.SportName</td>

@@ -1,0 +1,25 @@
+﻿@model List<clsNotification>
+@{ Layout = "_Layout"; }
+
+<h3><i class="bi bi-bell-fill text-warning"></i> Notifications</h3>
+<hr />
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No notifications yet.</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (clsNotification n in Model)
+        {
+            <div class="list-group-item list-group-item-action @(n.IsRead ? "" : "list-group-item-warning")">
+                <div class="d-flex justify-content-between">
+                    <strong>@n.Title</strong>
+                    <small class="text-muted">@n.CreatedAt.ToString("dd MMM HH:mm")</small>
+                </div>
+                <p class="mb-0 small">@n.Body</p>
+            </div>
+        }
+    </div>
+}

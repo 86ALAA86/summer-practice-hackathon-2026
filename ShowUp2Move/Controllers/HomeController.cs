@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ShowUp2Move_BLL;
+using ShowUp2Move.BLL;
 
 namespace ShowUp2Move.Controllers
 {
@@ -11,15 +11,16 @@ namespace ShowUp2Move.Controllers
                 return RedirectToAction("Login", "Account");
 
             int userID = HttpContext.Session.GetInt32("UserID")!.Value;
-            clsUser_BLL? user = clsUser_BLL.Find(userID);
+            clsUser? user = clsUser.Find(userID);
 
             if (user == null)
                 return RedirectToAction("Login", "Account");
 
+            ViewBag.UnreadCount = clsNotification.GetByUser(userID, unreadOnly: true).Count;
+
             return View(user);
         }
 
-        // ?? Toggle ShowUpToday 
         [HttpPost]
         public IActionResult ToggleAvailability(bool isAvailable)
         {
@@ -27,7 +28,7 @@ namespace ShowUp2Move.Controllers
                 return RedirectToAction("Login", "Account");
 
             int userID = HttpContext.Session.GetInt32("UserID")!.Value;
-            clsUser_BLL.UpdateAvailability(userID, isAvailable);
+            clsUser.UpdateAvailability(userID, isAvailable);
 
             return RedirectToAction("Dashboard");
         }

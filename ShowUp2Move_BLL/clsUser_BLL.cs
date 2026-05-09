@@ -14,6 +14,7 @@ namespace ShowUp2Move.BLL
         public string SkillLevel { get; set; } = string.Empty;
         public bool IsAvailableToday { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string ProfilePhotoUrl { get; set; } = string.Empty;
 
         public static clsUser? Find(int userID)
         {
@@ -29,7 +30,8 @@ namespace ShowUp2Move.BLL
                 Description = row["Description"] == DBNull.Value ? "" : row["Description"].ToString()!,
                 SkillLevel = row["SkillLevel"] == DBNull.Value ? "" : row["SkillLevel"].ToString()!,
                 IsAvailableToday = (bool)row["IsAvailableToday"],
-                CreatedAt = (DateTime)row["CreatedAt"]
+                CreatedAt = (DateTime)row["CreatedAt"],
+                ProfilePhotoUrl = row["ProfilePhotoUrl"] == DBNull.Value ? "" : row["ProfilePhotoUrl"].ToString()!
             };
         }
 

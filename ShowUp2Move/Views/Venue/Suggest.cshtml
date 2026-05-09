@@ -1,0 +1,38 @@
+﻿@{ Layout = "_Layout"; }
+
+<h3>Suggest a Venue</h3>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">Venue for Group #@ViewBag.GroupID</div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="groupID" value="@ViewBag.GroupID" />
+                    <div class="mb-3">
+                        <label class="form-label">Venue Name</label>
+                        <input type="text" name="venueName" class="form-control" required
+                               placeholder="e.g. Central Park Football Field" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address (optional)</label>
+                        <input type="text" name="address" class="form-control"
+                               placeholder="e.g. Str. Revolutiei 12" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estimated Price (RON, optional)</label>
+                        <input type="number" name="priceEst" class="form-control"
+                               step="0.01" placeholder="e.g. 150" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notes (optional)</label>
+                        <textarea name="notes" class="form-control" rows="2"
+                                  placeholder="Any extra info about this venue..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 fw-bold">Suggest Venue</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,38 +5,34 @@ namespace ShowUp2Move.Controllers
 {
     public class GroupController : Controller
     {
-        // My Groups
         public IActionResult Index()
         {
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
             int userID = HttpContext.Session.GetInt32("UserID")!.Value;
-            List<clsGroup_BLL> groups = clsGroup_BLL.GetGroupsByUser(userID);
-
-            return View(groups);
+            return View(clsGroup.GetGroupsByUser(userID));
         }
 
-        // Group Detail 
         public IActionResult Detail(int id)
         {
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            List<clsGroupMember> members = clsGroup.GetGroupMembers(id);
             ViewBag.GroupID = id;
+            ViewBag.Members = clsGroup.GetGroupMembers(id);
+            ViewBag.Venues = clsVenue.GetByGroup(id);
+            ViewBag.Polls = clsPoll.GetByGroup(id);
 
-            return View(members);
+            return View();
         }
 
-        //Run Matching
         public IActionResult RunMatching()
         {
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            List<clsSport_BLL> sports = clsSport_BLL.GetAll();
-            return View(sports);
+            return View(clsSport.GetAll());
         }
 
         [HttpPost]
@@ -45,8 +41,7 @@ namespace ShowUp2Move.Controllers
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            // get sport info for group size
-            clsSport_BLL? sport = clsSport_BLL.GetAll().FirstOrDefault(s => s.SportID == sportID);
+            clsSport? sport = clsSport.GetAll().FirstOrDefault(s => s.SportID == sportID);
 
             if (sport == null)
             {
@@ -54,17 +49,15 @@ namespace ShowUp2Move.Controllers
                 return RedirectToAction("RunMatching");
             }
 
-            bool success = clsGroup_BLL.RunMatching(sportID, sport.MinGroupSize, sport.MaxGroupSize);
+            bool success = clsGroup.RunMatching(sportID, sport.MinGroupSize, sport.MaxGroupSize);
 
-            if (success)
-                TempData["Success"] = $"Group created successfully for {sport.SportName}!";
-            else
-                TempData["Error"] = $"Not enough available players for {sport.SportName}. Need at least {sport.MinGroupSize}.";
+            TempData[success ? "Success" : "Error"] = success
+                ? $"Group created for {sport.SportName}!"
+                : $"Not enough available players for {sport.SportName}. Need at least {sport.MinGroupSize}.";
 
             return RedirectToAction("Index");
         }
 
-        //Confirm Participation
         [HttpPost]
         public IActionResult Confirm(int id)
         {
@@ -72,7 +65,7 @@ namespace ShowUp2Move.Controllers
                 return RedirectToAction("Login", "Account");
 
             int userID = HttpContext.Session.GetInt32("UserID")!.Value;
-            clsGroup_BLL.ConfirmParticipation(id, userID);
+            clsGroup.ConfirmParticipation(id, userID);
 
             return RedirectToAction("Index");
         }
