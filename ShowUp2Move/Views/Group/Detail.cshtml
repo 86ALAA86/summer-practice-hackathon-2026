@@ -1,0 +1,40 @@
+﻿@model List<clsGroupMember>
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Group Members</h3>
+    <a href="/Group/Index" class="btn btn-outline-secondary">Back to My Groups</a>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-success">
+        <tr>
+            <th>Name</th>
+            <th>Skill Level</th>
+            <th>Confirmed?</th>
+            <th>Joined</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (clsGroupMember member in Model)
+        {
+            <tr>
+                <td>@member.FullName</td>
+                <td>@(string.IsNullOrEmpty(member.SkillLevel) ? "—" : member.SkillLevel)</td>
+                <td>
+                    @if (member.HasConfirmed)
+                    {
+                        <span class="badge bg-success">Yes</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Pending</span>
+                    }
+                </td>
+                <td>@member.JoinedAt.ToString("dd MMM yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<h3>Create Event</h3>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">New Event</div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Sport</label>
+                        <select name="sportID" class="form-select">
+                            @if (ViewBag.Sports != null)
+                            {
+                                foreach (clsSport_BLL sport in ViewBag.Sports)
+                                {
+                                    <option value="@sport.SportID">@sport.SportName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" placeholder="e.g. Central Park" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date & Time</label>
+                        <input type="datetime-local" name="eventDate" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Create Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

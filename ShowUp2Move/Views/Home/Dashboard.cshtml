@@ -1,0 +1,78 @@
+﻿@model clsUser_BLL
+@{
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>Welcome back, <strong>@Model.FullName</strong> 👋</h2>
+        <p class="text-muted">Ready to move today?</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <form method="post" action="/Home/ToggleAvailability">
+            @if (Model.IsAvailableToday)
+            {
+                <input type="hidden" name="isAvailable" value="false" />
+                <button type="submit" class="btn btn-success btn-lg">
+                    ✅ ShowUpToday? — I'm IN
+                </button>
+            }
+            else
+            {
+                <input type="hidden" name="isAvailable" value="true" />
+                <button type="submit" class="btn btn-outline-secondary btn-lg">
+                    ❌ ShowUpToday? — I'm OUT
+                </button>
+            }
+        </form>
+    </div>
+</div>
+
+<hr />
+
+<div class="row mt-3 g-3">
+    <div class="col-md-3">
+        <a href="/Profile/Index" class="text-decoration-none">
+            <div class="card text-center shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <i class="bi bi-person-circle fs-1 text-success"></i>
+                    <h5 class="mt-2">My Profile</h5>
+                    <p class="text-muted small">Edit info & sports</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="/Group/RunMatching" class="text-decoration-none">
+            <div class="card text-center shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <i class="bi bi-people-fill fs-1 text-success"></i>
+                    <h5 class="mt-2">Find a Group</h5>
+                    <p class="text-muted small">Auto-match by sport</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="/Group/Index" class="text-decoration-none">
+            <div class="card text-center shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <i class="bi bi-shield-fill fs-1 text-success"></i>
+                    <h5 class="mt-2">My Groups</h5>
+                    <p class="text-muted small">View & confirm</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="/Event/Index" class="text-decoration-none">
+            <div class="card text-center shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <i class="bi bi-calendar-event-fill fs-1 text-success"></i>
+                    <h5 class="mt-2">Events</h5>
+                    <p class="text-muted small">Browse & create</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

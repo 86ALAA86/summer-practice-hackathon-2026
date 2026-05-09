@@ -1,0 +1,44 @@
+﻿@model List<clsEvent_BLL>
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Events</h3>
+    <a href="/Event/Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Create Event
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No events yet. Be the first to create one!</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-success">
+            <tr>
+                <th>Sport</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Created By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (clsEvent_BLL ev in Model)
+            {
+                <tr>
+                    <td>@ev.SportName</td>
+                    <td>@(string.IsNullOrEmpty(ev.Location) ? "—" : ev.Location)</td>
+                    <td>@ev.EventDate.ToString("dd MMM yyyy HH:mm")</td>
+                    <td>@ev.CreatedBy</td>
+                    <td>
+                        <a href="/Event/Detail/@ev.EventID" class="btn btn-sm btn-outline-secondary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

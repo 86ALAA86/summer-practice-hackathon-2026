@@ -1,0 +1,75 @@
+﻿@model clsUser_BLL
+@{
+    Layout = "_Layout";
+}
+
+<h3>My Profile</h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">Edit Info</div>
+            <div class="card-body">
+                <form method="post" action="/Profile/Edit">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="fullName" class="form-control" value="@Model.FullName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">About Me</label>
+                        <textarea name="description" class="form-control" rows="3">@Model.Description</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Skill Level</label>
+                        <select name="skillLevel" class="form-select">
+                            <option value="Beginner"     selected="@(Model.SkillLevel == "Beginner")">Beginner</option>
+                            <option value="Intermediate" selected="@(Model.SkillLevel == "Intermediate")">Intermediate</option>
+                            <option value="Advanced"     selected="@(Model.SkillLevel == "Advanced")">Advanced</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-3">
+            <div class="card-header bg-success text-white">My Sports</div>
+            <div class="card-body">
+                @if (ViewBag.UserSports != null)
+                {
+                    foreach (clsSport_BLL sport in ViewBag.UserSports)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span><i class="bi bi-trophy-fill text-success"></i> @sport.SportName</span>
+                            <form method="post" action="/Profile/DeleteSport">
+                                <input type="hidden" name="sportID" value="@sport.SportID" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                            </form>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">Add a Sport</div>
+            <div class="card-body">
+                <form method="post" action="/Profile/AddSport" class="d-flex gap-2">
+                    <select name="sportID" class="form-select">
+                        @if (ViewBag.AllSports != null)
+                        {
+                            foreach (clsSport_BLL sport in ViewBag.AllSports)
+                            {
+                                <option value="@sport.SportID">@sport.SportName</option>
+                            }
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
