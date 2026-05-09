@@ -6,14 +6,15 @@ namespace ShowUp2Move.DAL
 {
     public static class clsEventDAL
     {
+       
         public static bool CreateEvent(int createdByUserID, int sportID, string location,
                                        DateTime eventDate, string description, bool isManual,
-                                       ref int newEventID)
+                                       ref int newEventID, int? groupID = null)
         {
             newEventID = -1;
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_CreateEvent", connection))
+            using (SqlCommand command = new SqlCommand("USP_CreateEvent", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -23,6 +24,10 @@ namespace ShowUp2Move.DAL
                 command.Parameters.Add("@EventDate", SqlDbType.DateTime).Value = eventDate;
                 command.Parameters.Add("@Description", SqlDbType.NVarChar, 500).Value = description;
                 command.Parameters.Add("@IsManual", SqlDbType.Bit).Value = isManual;
+
+                // GroupID is optional — NULL for manual events
+                SqlParameter groupIDParam = command.Parameters.Add("@GroupID", SqlDbType.Int);
+                groupIDParam.Value = groupID.HasValue ? (object)groupID.Value : DBNull.Value;
 
                 SqlParameter outputID = new SqlParameter("@NewEventID", SqlDbType.Int);
                 outputID.Direction = ParameterDirection.Output;
@@ -49,7 +54,7 @@ namespace ShowUp2Move.DAL
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetAllEvents", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetAllEvents", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -69,7 +74,7 @@ namespace ShowUp2Move.DAL
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetEventByID", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetEventByID", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 

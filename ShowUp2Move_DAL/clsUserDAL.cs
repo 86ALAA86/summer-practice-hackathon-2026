@@ -6,12 +6,13 @@ namespace ShowUp2Move.DAL
 {
     public static class clsUserDAL
     {
+
         public static bool AddUser(string username, string password, string fullName, ref int newUserID)
         {
             newUserID = -1;
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_AddUser", connection))
+            using (SqlCommand command = new SqlCommand("USP_AddUser", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -44,7 +45,7 @@ namespace ShowUp2Move.DAL
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetUserByCredentials", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetUserByCredentials", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -67,7 +68,7 @@ namespace ShowUp2Move.DAL
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetUserByID", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetUserByID", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -84,10 +85,62 @@ namespace ShowUp2Move.DAL
             return dt;
         }
 
+     
+        public static bool UpdateUserProfile(int userID, string fullName, string description, string skillLevel)
+        {
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            using (SqlCommand command = new SqlCommand("USP_UpdateUserProfile", connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userID;
+                command.Parameters.Add("@FullName", SqlDbType.NVarChar, 150).Value = fullName;
+                command.Parameters.Add("@Description", SqlDbType.NVarChar, 500).Value = description;
+                command.Parameters.Add("@SkillLevel", SqlDbType.NVarChar, 50).Value = skillLevel;
+
+                SqlParameter returnValue = new SqlParameter();
+                returnValue.Direction = ParameterDirection.ReturnValue;
+                command.Parameters.Add(returnValue);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return (int)returnValue.Value == 1;
+                }
+                catch { return false; }
+            }
+        }
+
+        public static bool UpdateProfilePhoto(int userID, string profilePhotoUrl)
+        {
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            using (SqlCommand command = new SqlCommand("USP_UpdateProfilePhoto", connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userID;
+                command.Parameters.Add("@ProfilePhotoUrl", SqlDbType.NVarChar, 500).Value = profilePhotoUrl;
+
+                SqlParameter returnValue = new SqlParameter();
+                returnValue.Direction = ParameterDirection.ReturnValue;
+                command.Parameters.Add(returnValue);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return (int)returnValue.Value == 1;
+                }
+                catch { return false; }
+            }
+        }
+
+        
         public static bool UpdateUserAvailability(int userID, bool isAvailable)
         {
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_UpdateUserAvailability", connection))
+            using (SqlCommand command = new SqlCommand("USP_UpdateUserAvailability", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -108,17 +161,17 @@ namespace ShowUp2Move.DAL
             }
         }
 
-        public static bool UpdateUserProfile(int userID, string fullName, string description, string skillLevel)
+        
+        public static bool UpdateUserLocation(int userID, double latitude, double longitude)
         {
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_UpdateUserProfile", connection))
+            using (SqlCommand command = new SqlCommand("USP_UpdateUserLocation", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.Add("@UserID", SqlDbType.Int).Value = userID;
-                command.Parameters.Add("@FullName", SqlDbType.NVarChar, 150).Value = fullName;
-                command.Parameters.Add("@Description", SqlDbType.NVarChar, 500).Value = description;
-                command.Parameters.Add("@SkillLevel", SqlDbType.NVarChar, 50).Value = skillLevel;
+                command.Parameters.Add("@Latitude", SqlDbType.Float).Value = latitude;
+                command.Parameters.Add("@Longitude", SqlDbType.Float).Value = longitude;
 
                 SqlParameter returnValue = new SqlParameter();
                 returnValue.Direction = ParameterDirection.ReturnValue;

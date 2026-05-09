@@ -6,12 +6,13 @@ namespace ShowUp2Move.DAL
 {
     public static class clsGroupDAL
     {
+        
         public static DataTable GetAvailableUsersBySport(int sportID)
         {
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetAvailableUsersBySport", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetAvailableUsersBySport", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -28,12 +29,40 @@ namespace ShowUp2Move.DAL
             return dt;
         }
 
+       
+        public static DataTable GetAvailableUsersBySportNearby(int sportID, double latitude,
+                                                                double longitude, double radiusKm = 10.0)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            using (SqlCommand command = new SqlCommand("USP_GetAvailableUsersBySportNearby", connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@SportID", SqlDbType.Int).Value = sportID;
+                command.Parameters.Add("@Latitude", SqlDbType.Float).Value = latitude;
+                command.Parameters.Add("@Longitude", SqlDbType.Float).Value = longitude;
+                command.Parameters.Add("@RadiusKm", SqlDbType.Float).Value = radiusKm;
+
+                try
+                {
+                    connection.Open();
+                    dt.Load(command.ExecuteReader());
+                }
+                catch { }
+            }
+
+            return dt;
+        }
+
+        
         public static bool CreateGroup(int sportID, int captainUserID, ref int newGroupID)
         {
             newGroupID = -1;
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_CreateGroup", connection))
+            using (SqlCommand command = new SqlCommand("USP_CreateGroup", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -63,7 +92,7 @@ namespace ShowUp2Move.DAL
         public static bool AddGroupMember(int groupID, int userID)
         {
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_AddGroupMember", connection))
+            using (SqlCommand command = new SqlCommand("USP_AddGroupMember", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -84,12 +113,13 @@ namespace ShowUp2Move.DAL
             }
         }
 
+       
         public static DataTable GetGroupsByUser(int userID)
         {
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetGroupsByUser", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetGroupsByUser", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -111,7 +141,7 @@ namespace ShowUp2Move.DAL
             DataTable dt = new DataTable();
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_GetGroupMembers", connection))
+            using (SqlCommand command = new SqlCommand("USP_GetGroupMembers", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -128,10 +158,11 @@ namespace ShowUp2Move.DAL
             return dt;
         }
 
+        
         public static bool ConfirmParticipation(int groupID, int userID)
         {
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
-            using (SqlCommand command = new SqlCommand("usp_ConfirmParticipation", connection))
+            using (SqlCommand command = new SqlCommand("USP_ConfirmParticipation", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
