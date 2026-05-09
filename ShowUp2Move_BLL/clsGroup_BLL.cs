@@ -1,16 +1,10 @@
 ﻿using ShowUp2Move.DAL;
 using ShowUp2Move_DAL;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShowUp2Move_BLL
+namespace ShowUp2Move.BLL
 {
-    
-   public class clsGroup_BLL
+    public class clsGroup
     {
         public int GroupID { get; set; }
         public string SportName { get; set; } = string.Empty;
@@ -19,15 +13,13 @@ namespace ShowUp2Move_BLL
         public DateTime CreatedAt { get; set; }
         public bool HasConfirmed { get; set; }
 
-        // ── Get Groups for a User ────────────────────────────────
-        public static List<clsGroup_BLL> GetGroupsByUser(int userID)
+        public static List<clsGroup> GetGroupsByUser(int userID)
         {
             DataTable dt = clsGroupDAL.GetGroupsByUser(userID);
-            List<clsGroup_BLL> list = new List<clsGroup_BLL>();
+            List<clsGroup> list = new List<clsGroup>();
 
             foreach (DataRow row in dt.Rows)
-            {
-                list.Add(new clsGroup_BLL
+                list.Add(new clsGroup
                 {
                     GroupID = (int)row["GroupID"],
                     SportName = row["SportName"].ToString()!,
@@ -36,19 +28,16 @@ namespace ShowUp2Move_BLL
                     CreatedAt = (DateTime)row["CreatedAt"],
                     HasConfirmed = (bool)row["HasConfirmed"]
                 });
-            }
 
             return list;
         }
 
-        // ── Get Members of a Group ───────────────────────────────
         public static List<clsGroupMember> GetGroupMembers(int groupID)
         {
             DataTable dt = clsGroupDAL.GetGroupMembers(groupID);
             List<clsGroupMember> list = new List<clsGroupMember>();
 
             foreach (DataRow row in dt.Rows)
-            {
                 list.Add(new clsGroupMember
                 {
                     UserID = (int)row["UserID"],
@@ -57,30 +46,36 @@ namespace ShowUp2Move_BLL
                     HasConfirmed = (bool)row["HasConfirmed"],
                     JoinedAt = (DateTime)row["JoinedAt"]
                 });
-            }
 
             return list;
         }
 
-        // ── Matching Logic ───────────────────────────────────────
         public static bool RunMatching(int sportID, int minSize, int maxSize)
         {
             DataTable dt = clsGroupDAL.GetAvailableUsersBySport(sportID);
+            return CreateGroupFromTable(dt, sportID, minSize, maxSize);
+        }
 
+        
+        public static bool RunMatchingNearby(int sportID, int minSize, int maxSize,
+                                             double latitude, double longitude, double radiusKm = 10.0)
+        {
+            DataTable dt = clsGroupDAL.GetAvailableUsersBySportNearby(sportID, latitude, longitude, radiusKm);
+            return CreateGroupFromTable(dt, sportID, minSize, maxSize);
+        }
+
+        private static bool CreateGroupFromTable(DataTable dt, int sportID, int minSize, int maxSize)
+        {
             if (dt.Rows.Count < minSize)
-                return false;  // not enough players
+                return false;
 
-            // take up to maxSize players — first row becomes captain (already randomized by NEWID())
             int captainUserID = (int)dt.Rows[0]["UserID"];
             int newGroupID = -1;
 
             bool created = clsGroupDAL.CreateGroup(sportID, captainUserID, ref newGroupID);
-
-            if (!created)
-                return false;
+            if (!created) return false;
 
             int count = Math.Min(dt.Rows.Count, maxSize);
-
             for (int i = 0; i < count; i++)
             {
                 int memberUserID = (int)dt.Rows[i]["UserID"];
@@ -90,14 +85,10 @@ namespace ShowUp2Move_BLL
             return true;
         }
 
-        // ── Confirm ──────────────────────────────────────────────
         public static bool ConfirmParticipation(int groupID, int userID)
-        {
-            return clsGroupDAL.ConfirmParticipation(groupID, userID);
-        }
+            => clsGroupDAL.ConfirmParticipation(groupID, userID);
     }
 
-    // ── Helper class for group member display ────────────────────
     public class clsGroupMember
     {
         public int UserID { get; set; }

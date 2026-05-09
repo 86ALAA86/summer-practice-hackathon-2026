@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShowUp2Move_BLL;
+using ShowUp2Move.BLL;
 
 namespace ShowUp2Move.Controllers
 {
@@ -23,7 +23,7 @@ namespace ShowUp2Move.Controllers
             if (HttpContext.Session.GetInt32("UserID") == null)
                 return RedirectToAction("Login", "Account");
 
-            List<clsGroupMember> members = clsGroup_BLL.GetGroupMembers(id);
+            List<clsGroupMember> members = clsGroup.GetGroupMembers(id);
             ViewBag.GroupID = id;
 
             return View(members);

@@ -1,15 +1,10 @@
 ﻿using ShowUp2Move.DAL;
 using ShowUp2Move_DAL;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShowUp2Move_BLL
+namespace ShowUp2Move.BLL
 {
-    public class clsUser_BLL
+    public class clsUser
     {
         public int UserID { get; set; }
         public string Username { get; set; } = string.Empty;
@@ -20,17 +15,13 @@ namespace ShowUp2Move_BLL
         public bool IsAvailableToday { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        // ── Find ────────────────────────────────────────────────
-        public static clsUser_BLL? Find(int userID)
+        public static clsUser? Find(int userID)
         {
             DataTable dt = clsUserDAL.GetUserByID(userID);
-
-            if (dt.Rows.Count == 0)
-                return null;
+            if (dt.Rows.Count == 0) return null;
 
             DataRow row = dt.Rows[0];
-
-            return new clsUser_BLL
+            return new clsUser
             {
                 UserID = (int)row["UserID"],
                 Username = row["Username"].ToString()!,
@@ -42,16 +33,13 @@ namespace ShowUp2Move_BLL
             };
         }
 
-        public static clsUser_BLL? FindByCredentials(string username, string password)
+        public static clsUser? FindByCredentials(string username, string password)
         {
             DataTable dt = clsUserDAL.GetUserByCredentials(username, password);
-
-            if (dt.Rows.Count == 0)
-                return null;
+            if (dt.Rows.Count == 0) return null;
 
             DataRow row = dt.Rows[0];
-
-            return new clsUser_BLL
+            return new clsUser
             {
                 UserID = (int)row["UserID"],
                 Username = row["Username"].ToString()!,
@@ -62,21 +50,19 @@ namespace ShowUp2Move_BLL
             };
         }
 
-        // ── Add ─────────────────────────────────────────────────
         public static bool Add(string username, string password, string fullName, ref int newUserID)
-        {
-            return clsUserDAL.AddUser(username, password, fullName, ref newUserID);
-        }
+            => clsUserDAL.AddUser(username, password, fullName, ref newUserID);
 
-        // ── Update ──────────────────────────────────────────────
         public static bool UpdateProfile(int userID, string fullName, string description, string skillLevel)
-        {
-            return clsUserDAL.UpdateUserProfile(userID, fullName, description, skillLevel);
-        }
+            => clsUserDAL.UpdateUserProfile(userID, fullName, description, skillLevel);
 
         public static bool UpdateAvailability(int userID, bool isAvailable)
-        {
-            return clsUserDAL.UpdateUserAvailability(userID, isAvailable);
-        }
+            => clsUserDAL.UpdateUserAvailability(userID, isAvailable);
+
+        public static bool UpdateProfilePhoto(int userID, string photoUrl)
+            => clsUserDAL.UpdateProfilePhoto(userID, photoUrl);
+
+        public static bool UpdateLocation(int userID, double latitude, double longitude)
+            => clsUserDAL.UpdateUserLocation(userID, latitude, longitude);
     }
 }
